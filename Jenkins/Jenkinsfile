@@ -1,0 +1,42 @@
+properties([
+    parameters([
+        string(
+            name: "PHONE_NUMBER",
+            defaultValue: "",
+            description: "Phone number to send notifications"
+        )
+    ])
+])
+
+pipeline {
+    agent {label 'master'}
+    stages {
+        stage("Checkout repository") {
+            steps {
+                git credentialsId: 'github',
+                url: 'git@github.com:icevirm/public_ip_check.git'
+            }
+        }
+        stage("Initialize terraform") {
+            steps {
+                dir('terraform') {
+                    sh 'terraform init'
+                }
+            }
+        }
+        stage("Plan terraform") {
+            steps {
+                dir('terraform') {
+                    sh 'terraform plan -var phone=${PHONE_NUMBER} -out=terraform.plan'
+                }
+            }
+        }
+        stage("Apply terraform"){
+            steps {
+                dir('terraform') {
+                    sh 'terraform apply -auto-approve terraform.plan'
+                }
+            }
+        }
+    }
+}
