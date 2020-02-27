@@ -8,6 +8,7 @@ The infrastructure provisioned by this module is considered to be deployed into 
 - VPC and subnets are set without default public ip association
 - S3 bucket for tfstate is set up and accessible
 - Secured storage is set up and accessible
+- Jenkins is installed and configured with credentials
 
 For needs of the lab installation is simplified:
 - EC2 instance has only one interface
